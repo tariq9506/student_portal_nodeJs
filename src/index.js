@@ -9,13 +9,10 @@ app.use(cors());
 app.use(express.json());
 
 // Test route
-app.get('/', (req, res) => {
-  console.log('GET / hit!'); // <- this will print on every browser hit
-  res.send('Student Portal API is running 🚀');
-});
+app.use("/api/students",require("./routes/student"));
 
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server started on port in ${PORT}`);
 });
