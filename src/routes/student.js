@@ -1,21 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const {getStudentDetails,createStudent,updateStudentDetails, deleteStudentById} = require("../controller/student");
 
-router.route("/").get( (req, res) => {
-  console.log('GET / hit!'); // <- this will print on every browser hit
-res.status(200).json({message:"Student Portal API is running 🚀"});
-})
-router.route("/:id").put( (req, res) => {
-  console.log('GET / hit!'); // <- this will print on every browser hit
-res.status(200).json({message:'Student Portal API is running 🚀'});
-})
-router.route("/").post( (req, res) => {
-  console.log('GET / hit!'); // <- this will print on every browser hit
-  res.status(200).json({message:'Student Portal API is running 🚀'});
-})
-router.route("/:id").delete( (req, res) => {
-  console.log('GET / hit!'); // <- this will print on every browser hit
-res.status(200).json({message:'Student Portal API is running 🚀'});
-})
+router.route("/").get(getStudentDetails);
+router.route("/:id").put(updateStudentDetails);
+router.route("/").post(createStudent);
+router.route("/:id").delete(deleteStudentById);
 
 module.exports = router;
