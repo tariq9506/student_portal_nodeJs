@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt")
 const{createStudentModel,
-        checkUserExixst
+        checkUserExist
 } = require('../models/students')
 
 
@@ -13,7 +13,7 @@ const createStudent = asyncHandler(async (req, res) => {
     throw new Error("All fields are mandatory!");
   }
 
-  const studentExist = await checkUserExixst(email); // stops here if DB error
+  const studentExist = await checkUserExist(email); // stops here if DB error
   if (studentExist) {
     res.status(400);
     throw new Error("Student already exists with this email.");

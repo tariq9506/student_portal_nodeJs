@@ -1,6 +1,6 @@
 
 const pool = require('../config/config')
-const checkUserExixst = async (email) => {
+const checkUserExist = async (email) => {
   const query = `
     SELECT EXISTS(
         SELECT 1 FROM students WHERE email = $1
@@ -10,7 +10,7 @@ const checkUserExixst = async (email) => {
     const isExist = await pool.query(query, [email]);
     return isExist.rows[0].exist;
   } catch (err) {
-    console.error('❌ DB error in checkUserExixst:', err.message);
+    console.error('❌ DB error in checkUserExist:', err.message);
     throw err; // This stops controller execution
   }
 };
@@ -33,4 +33,4 @@ const createStudentModel = async(user) => {
     throw err;
   }
 }; 
-module.exports = {createStudentModel,checkUserExixst}
+module.exports = {createStudentModel,checkUserExist}
