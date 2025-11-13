@@ -14,9 +14,9 @@ const checkUserExist = async (email) => {
     throw err; // This stops controller execution
   }
 };
-const createStudentModel = async(user) => {
-    console.log(user)
-    const { studentName, email, hashPass, phone } = user;
+const createStudentModel = async(student) => {
+    console.log(student)
+    const { studentName, email, hashPass, phone } = student;
 
   const query = `
     INSERT INTO students (name, email, password, phone)
@@ -33,4 +33,22 @@ const createStudentModel = async(user) => {
     throw err;
   }
 }; 
-module.exports = {createStudentModel,checkUserExist}
+const findStudents = async(email) =>{
+    console.log(email);
+    const query = `SELECT id,name,password FROM students WHERE email = $1;`;
+    console.log(query)
+    try{
+        const result  = await pool.query(query,[email]);
+        console.log(result.rows[0]);
+        if (result.rows.length===0){
+            return null;
+        }
+            return result.rows[0];
+    }catch{
+            console.log("error while querying from database to fetch student details", err.message);
+            throw new Error("Database query failed while selecting student details.");
+            
+    }
+
+};
+module.exports = {createStudentModel,checkUserExist,findStudents}
