@@ -10,6 +10,7 @@ const {
         validateEmail,
         validatePhone
 } = require('../utility/util');
+const { sendVerificationCode } = require("./otp");
 
 const createStudent = asyncHandler(async (req, res) => {
   const { studentName, email, phone, password } = req.body;
@@ -36,6 +37,17 @@ const createStudent = asyncHandler(async (req, res) => {
 
   const hashPass = await bcrypt.hash(password, 10);
   const user = { studentName, email, hashPass, phone };
+ try{
+     const {otp, expires_at} = await sendVerificationCode(email);
+      user.otp =otp;
+      user.expires_at  =expires_at;
+
+ }catch(err){
+  throw new Error("Failed to send otp !",err.message);
+  console.log("Failed to send otp !",err.message);
+  
+ }
+ 
   const newUser = await createStudentModel(user);
 
   res.status(201).json({
