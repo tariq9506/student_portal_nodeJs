@@ -6,6 +6,10 @@ const{createStudentModel,
         findStudents
 } = require('../models/students')
 
+const {
+        validateEmail,
+        validatePhone
+} = require('../utility/util');
 
 const createStudent = asyncHandler(async (req, res) => {
   const { studentName, email, phone, password } = req.body;
@@ -13,8 +17,17 @@ const createStudent = asyncHandler(async (req, res) => {
   if (!studentName || !email || !phone || !password) {
     res.status(400);
     throw new Error("All fields are mandatory!");
-  }
-
+  };
+  if(!validateEmail(email)){
+    res.status(400);
+    throw new Error("Invalid email address !");
+    
+  };
+  if(!validatePhone(phone)){
+    res.status(400);
+    throw new Error("Invalid Phone Number !");
+    
+  };
   const studentExist = await checkUserExist(email); // stops here if DB error
   if (studentExist) {
     res.status(400);
@@ -39,7 +52,12 @@ const studentLogin = asyncHandler(async(req,res)=>{
         res.status(400);
         throw new Error("Missing Mendatory Field.");
     }
-    const student = await findStudents(email)
+    if(!validateEmail(email)){
+      res.status(400);
+      throw new Error("Email address invalid !");
+      
+    };
+    const student = await findStudents(email);
     console.log(student.password)
     if (student && (await bcrypt.compare(password,student.password))){
         const accessToken = jwt.sign({
@@ -59,7 +77,26 @@ const studentLogin = asyncHandler(async(req,res)=>{
 });
 
 const getStudentDetails = asyncHandler(async(req,res)=>{
-    res.status(200).json({message:"Get student details"});
+      const {email} = req.body;
+      if (!email){
+        res.status(404);
+        throw new Error("Please enter your email address !");
+      }
+       if(!validateEmail(email)){
+      res.status(400);
+      throw new Error("Email address invalid !");
+      
+    };
+      const student = await findStudents(email);
+      if (!student){
+        res.status(404);
+        throw new Error("No record found with given email address.");
+      }
+
+    res.status(200).json({
+      message:"Find student details.",
+      student:student
+    });
 });
 
 
