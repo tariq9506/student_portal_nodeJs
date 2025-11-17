@@ -16,14 +16,23 @@ const checkUserExist = async (email) => {
 };
 const createStudentModel = async(student) => {
     console.log(student)
-    const { studentName, email, hashPass, phone } = student;
+    const { studentName, email, hashPass, phone,otp,expires_at } = student;
 
   const query = `
-    INSERT INTO students (name, email, password, phone)
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO students (
+    name, 
+    email, 
+    password, 
+    phone,
+    otp,
+    otp_expires_at,
+    otp_created_at ,
+    created_at
+    )
+    VALUES ($1, $2, $3, $4,$5,$6,NOW(),NOW())
     RETURNING *;
   `;
-  const values = [studentName, email, hashPass, phone];
+  const values = [studentName, email, hashPass, phone,otp,expires_at];
 
   try {
     const result = await pool.query(query, values);
