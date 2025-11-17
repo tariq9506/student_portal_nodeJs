@@ -1,5 +1,5 @@
 
-const pool = require('../config/config')
+const {pool} = require('../config/config')
 const checkUserExist = async (email) => {
   const query = `
     SELECT EXISTS(
@@ -44,7 +44,7 @@ const findStudents = async(email) =>{
             return null;
         }
             return result.rows[0];
-    }catch{
+    }catch(err){
             console.log("error while querying from database to fetch student details", err.message);
             throw new Error("Database query failed while selecting student details.");
             

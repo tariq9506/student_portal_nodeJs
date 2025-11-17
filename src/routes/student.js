@@ -8,10 +8,11 @@ const {
   updateStudentDetails,
   deleteStudentById,
   studentLogin} = require("../controller/student");
+const validateToken = require("../middleware/jwtValidate");
 const upload = multer(); 
 
-router.route("/").post(upload.none(),createStudent);
-router.route("/").get(getStudentDetails);
+router.route("/register").post(upload.none(),createStudent);
+router.route("/details").get(validateToken,upload.none(),getStudentDetails);
 router.route("/:id").put(updateStudentDetails);
 
 router.route("/:id").delete(deleteStudentById);

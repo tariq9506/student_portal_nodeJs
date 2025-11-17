@@ -1,15 +1,17 @@
 require('dotenv').config();
 const express = require('express');
+
+
 const cors = require('cors');
 const errorHandler = require('./middleware/errorHandler');
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 
 const app = express();
 
 // Middleware
 app.use(cors());
-const multer = require('multer');
-const upload = multer(); 
+// app.use(express.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // Test route
