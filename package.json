@@ -1,32 +1,37 @@
 {
-  "name": "student_portal_nodejs",
+  "name": "student-portal-backend",
   "version": "1.0.0",
   "description": "Making student portal using Node JS.",
   "main": "index.js",
- "scripts": {
-  "start": "node src/index.js",
-  "dev": "nodemon src/index.js",
-  "lint": "eslint .",
-  "lint:fix": "eslint . --fix",
-  "format": "prettier --write .",
-  "test": "echo \"Error: no test specified\" && exit 1"
-},
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tariq9506/student_portal_nodeJs.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Tariq",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/tariq9506/student_portal_nodeJs/issues"
   },
   "homepage": "https://github.com/tariq9506/student_portal_nodeJs#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
