@@ -44,7 +44,6 @@ const createStudent = asyncHandler(async (req, res) => {
 
  }catch(err){
   throw new Error("Failed to send otp !",err.message);
-  console.log("Failed to send otp !",err.message);
   
  }
  
@@ -52,7 +51,10 @@ const createStudent = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     message: "Student created successfully 🚀",
-    user: newUser,
+    stuent_name: newUser.name,
+    email: newUser.email,
+    phone:newUser.phone,
+    created_at:newUser.created_at
   });
 });
  
