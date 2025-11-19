@@ -1,8 +1,36 @@
 const expressAsyncHandler = require("express-async-handler");
-const { markStudentVerified } = require("../models/otp");
+const { markStudentVerified, saveResendOTP } = require("../models/otp");
 const { sendOtp } = require("../utility/sendEmail");
 const { generateOTP, otpExpireIn, validateEmail } = require("../utility/util");
 const { findStudents } = require("../models/students");
+
+const resendOTP = expressAsyncHandler(async(req,res)=>{
+    const {email}  = req.body;
+    if (!email){
+        res.status(400);
+        throw new Error("Email address is mandetory, can't be empty");        
+    }
+    if(!validateEmail(email)){
+        res.status(400);
+        throw new Error("Email address is invalid !");
+    }
+    try{
+        const{otp,expires_at}=await sendVerificationCode(email)
+        try{
+            await saveResendOTP(otp,email,expires_at);
+            
+        }catch(err){
+            res.status(500);
+            throw new Error("ResesndOTP : Failed to save the otp"+err.message);            
+        };
+    }catch(err){
+        res.status(500);
+        throw new Error("Failed to resend otp at your email address."+err.message);
+    };
+    res.status(200).json({
+        message:"OTP send successfully at your email address"
+    });
+});
 
 const sendVerificationCode = async(email)=>{
     if (!email){
@@ -17,7 +45,7 @@ const sendVerificationCode = async(email)=>{
     await sendOtp(email, otp);
 } catch (err) {
     console.error("OTP send error:", err);
-    throw new Error("Unable to send OTP. Please try again later.");
+    throw new Error("Unable to send OTP. Please try again later."+err.message);
 }
     return {otp,expires_at};
 };
@@ -25,10 +53,12 @@ const verifyOtp = expressAsyncHandler(async (req, res) => {
     const { email, code } = req.body;
 
     if (!email || !code) {
+        res.status(400);
         throw new Error("Email address or OTP missing.");
     }
 
     if (!validateEmail(email)) {
+        res.status(400);
         throw new Error("Invalid email address.");
     }
 
@@ -36,6 +66,7 @@ const verifyOtp = expressAsyncHandler(async (req, res) => {
     const student = await findStudents(email);
 
     if (!student) {
+        res.status(500);
         throw new Error("Student does not exist.");
     }
 
@@ -68,4 +99,8 @@ const verifyOtp = expressAsyncHandler(async (req, res) => {
     });
 });
 
-module.exports = {sendVerificationCode,verifyOtp}
+module.exports = {
+                    sendVerificationCode,
+                    verifyOtp,
+                    resendOTP
+                }

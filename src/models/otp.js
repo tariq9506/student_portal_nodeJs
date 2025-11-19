@@ -29,8 +29,31 @@ const markStudentVerified = async (email) => {
     throw new Error("markStudentVerified: " + err.message);
   }
 };
+const saveResendOTP =async (otp,email,expires_at)=>{
+
+  const query = `
+                UPDATE students
+                SET otp=$1,
+                      otp_expires_at=$2,
+                      otp_created_at = NOW()
+                WHERE
+                    email = $3;`;
+    try {
+    const result = await pool.query(query, [otp, expires_at,email]);
+
+    if (result.rowCount === 0) {
+      throw new Error("No student found to update otp details.");
+    }
+
+    return true;
+
+  } catch (err) {
+    throw new Error("saveResendOTP: " + err.message);
+  }
+};
 
 module.exports = {
                 verifyOTP,
-                markStudentVerified
+                markStudentVerified,
+                saveResendOTP
 }

@@ -1,15 +1,17 @@
 const express = require("express");
 const multer = require('multer');
 const router = express.Router();
-
+const validateToken = require("../middleware/jwtValidate");
 const { 
   getStudentDetails,
   createStudent,
   updateStudentDetails,
   deleteStudentById,
   studentLogin} = require("../controller/student");
-const validateToken = require("../middleware/jwtValidate");
-const { verifyOtp } = require("../controller/otp");
+const { 
+      verifyOtp, 
+      resendOTP 
+    } = require("../controller/otp");
 const upload = multer(); 
 
 router.route("/register").post(upload.none(),createStudent);
@@ -20,5 +22,6 @@ router.route("/:id").delete(deleteStudentById);
 
 router.route("/login").post(upload.none(),studentLogin);
 router.route("/otp-verify").put(upload.none(),verifyOtp);
+router.route("/resent-otp").put(upload.none(),resendOTP);
 
 module.exports = router;
