@@ -44,7 +44,7 @@ const createStudentModel = async(student) => {
 }; 
 const findStudents = async(email) =>{
     console.log(email);
-    const query = `SELECT id,name,password FROM students WHERE email = $1;`;
+    const query = `SELECT id,name,password,otp,otp_expires_at FROM students WHERE email = $1;`;
     console.log(query)
     try{
         const result  = await pool.query(query,[email]);
