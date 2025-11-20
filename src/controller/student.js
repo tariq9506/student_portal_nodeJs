@@ -11,6 +11,7 @@ const {
         validatePhone
 } = require('../utility/util');
 const { sendVerificationCode } = require("./otp");
+const { PassThrough } = require("nodemailer/lib/xoauth2");
 
 const createStudent = asyncHandler(async (req, res) => {
   const { studentName, email, phone, password } = req.body;
@@ -101,7 +102,7 @@ const getStudentDetails = asyncHandler(async(req,res)=>{
       throw new Error("Email address invalid !");
       
     };
-      const student = await findStudents(email);
+      const student = await findStudents(email,0);
       if (!student){
         res.status(404);
         throw new Error("No record found with given email address.");
@@ -116,7 +117,40 @@ const getStudentDetails = asyncHandler(async(req,res)=>{
 
 
 const updateStudentDetails = asyncHandler(async(req, res) => {
-  console.log('PUT / hit!'); // <- this will print on every browser hit
+ 
+  const id = Number(req.params.id);
+  
+  if (!id || isNaN(id)){
+    res.status(404);
+    throw new Error("Student id must be valid number.");
+  };
+  const {studentName,phone} = req.body;
+  let updateFiels = {};
+  if (studentName !== undefined){
+
+    res.status(404);
+    throw new Error("Student name must be valid non empty string.");
+    
+  }
+updateFiels.studentName  = studentName.trim();
+
+  if (typeof phone != "string"){
+    res.status(404);
+    throw new Error("Phone no. must be valid.");
+  };
+  
+  if ( phone.trim().length != 0){
+    if(!validatePhone(phone)){
+    res.status(400);
+    throw new Error("phone no. is invalid.");
+  }else{
+      students = {phone};
+  }};
+  try{
+    
+  }catch(err){
+
+  }
   res.status(200).json({message:'Student Portal API is running 🚀. Student details updated successfully.'});
 });
 

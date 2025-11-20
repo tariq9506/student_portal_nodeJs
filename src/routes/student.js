@@ -15,8 +15,8 @@ const {
 const upload = multer(); 
 
 router.route("/register").post(upload.none(),createStudent);
-router.route("/details").get(validateToken,upload.none(),getStudentDetails);
-// router.route("/:id").put(updateStudentDetails);
+router.route("/profile").get(validateToken,upload.none(),getStudentDetails);
+router.route("/update/:id").put(updateStudentDetails);
 
 router.route("/:id").delete(deleteStudentById);
 
