@@ -13,6 +13,22 @@ const {
 const { sendVerificationCode } = require("./otp");
 const { PassThrough } = require("nodemailer/lib/xoauth2");
 
+
+
+// This API creates a new student account.
+// Method: POST
+// URL: /api/students/register
+//
+// What this function does:
+// 1. Checks if all required inputs are given (name, email, phone, password).
+// 2. Makes sure the email and phone number are valid.
+// 3. Checks if a student with this email already exists.
+// 4. Hashes the password before saving.
+// 5. Creates an OTP and expiry time for email verification.
+// 6. Sends the OTP to the user's email.
+// 7. Saves the new student into the database.
+// 8. Returns a success message with basic student details.
+
 const createStudent = asyncHandler(async (req, res) => {
   const { studentName, email, phone, password } = req.body;
 
@@ -126,7 +142,7 @@ const updateStudentDetails = asyncHandler(async(req, res) => {
   };
   const {studentName,phone} = req.body;
   let updateFiels = {};
-  if (studentName !== undefined){
+  if ((studentName !== undefined) && (typeof studentName !== "string" || studentName.trim().length ===0)){
 
     res.status(404);
     throw new Error("Student name must be valid non empty string.");
