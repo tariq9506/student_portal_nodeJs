@@ -42,12 +42,31 @@ const createStudentModel = async(student) => {
     throw err;
   }
 }; 
-const findStudents = async(email) =>{
-    console.log(email);
-    const query = `SELECT id,name,password,otp,otp_expires_at FROM students WHERE email = $1;`;
+const findStudents = async(email,id) =>{
+    console.log(`email = ${email} Id = ${id}`);
+    if (!email && !id){
+      throw new Error("email or id must be provided.");
+    };
+    const query = `SELECT 
+                      id,
+                      name,
+                      password,
+                      otp,
+                      otp_expires_at 
+                  FROM 
+                      students 
+                  WHERE`;
     console.log(query)
+    let values = [];
+    if (email){
+      query += `email = $1;`;
+      values.push(email);
+    }else{
+      query += `id = $1;`;
+      values.push(id);
+    };
     try{
-        const result  = await pool.query(query,[email]);
+        const result  = await pool.query(query,values);
         console.log(result.rows[0]);
         if (result.rows.length===0){
             return null;
